@@ -126,7 +126,6 @@
       text-align: center;
       margin-bottom: 24px;
     }
-    /* Overlay styles */
     #start-overlay {
       position:fixed;
       z-index:1000;
@@ -195,16 +194,15 @@
     <button id="reset-btn">😸 Play Again</button>
   </div>
   <div id="credits">
-    Cat photos: <a href="https://unsplash.com/photos/xII7efH1G6o" target="_blank">Eric Han</a> &amp; <a href="https://unsplash.com/photos/IXUM4cJynP0" target="_blank">Tran Mau Tri Tam</a> on Unsplash |
+    Cat photos: <a href="https://unsplash.com/photos/xII7efH1G6o" target="_blank">Eric Han</a> &amp; <a href="https://unsplash.com/photos/Du0Z2F3g9Vk" target="_blank">Paul Hanaoka</a> on Unsplash |
     Sound: <a href="https://freesound.org/people/PolterKaist/sounds/795848/" target="_blank">PolterKaist on FreeSound</a>
   </div>
   <!-- Sound Effect -->
   <audio id="catsound" src="https://cdn.freesound.org/previews/795/795848_2193265-lq.mp3"></audio>
   <script>
-    // Funny cat names with only cat images!
     const catNames = ["Mr. Whiskers", "Captain Purrfect"];
-    const CAT_X_URL = "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=facearea&w=400&h=400&facepad=2";
-    const CAT_O_URL = "https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?auto=format&fit=facearea&w=400&h=400&facepad=2";
+    const CAT_X_URL = "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=400&q=80";
+    const CAT_O_URL = "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80";
     const CAT_X = `<img src="${CAT_X_URL}" alt="Mr. Whiskers" class="cat">`;
     const CAT_O = `<img src="${CAT_O_URL}" alt="Captain Purrfect" class="cat">`;
     const cats = [CAT_X, CAT_O];
@@ -215,7 +213,6 @@
     const overlay = document.getElementById('start-overlay');
     const startBtn = document.getElementById('start-btn');
     const gameContainer = document.getElementById('game-container');
-
     let board = Array(9).fill('');
     let currentPlayer = 0; // 0 - Mr. Whiskers, 1 - Captain Purrfect
     let gameActive = false; // Set true after start overlay click
@@ -223,7 +220,6 @@
     function markWin(line){
       line.forEach(i => cells[i].classList.add('win'));
     }
-
     function playSound(){
       try {
         catsound.currentTime = 0;
@@ -233,7 +229,6 @@
         }
       } catch(e){}
     }
-
     function checkWinner(){
       const wins = [
         [0,1,2],[3,4,5],[6,7,8],
@@ -249,18 +244,15 @@
       if(board.every(cell => cell)) return {winner: 'draw'};
       return null;
     }
-
     function updateStatus(msg){
       statusDiv.innerHTML = `<span>${msg}</span>`;
     }
-
     function handleCellClick(e){
       const idx = +e.target.dataset.index;
       if(!gameActive || board[idx]) return;
       board[idx] = cats[currentPlayer];
       e.target.innerHTML = cats[currentPlayer];
       playSound();
-
       const result = checkWinner();
       if(result){
         gameActive = false;
@@ -278,7 +270,6 @@
         updateStatus(`It's <span style="color:#9b5cc6;font-weight:600">${catNames[currentPlayer]}</span>'s turn!`);
       }
     }
-
     function resetGame(){
       board = Array(9).fill('');
       currentPlayer = 0;
@@ -286,12 +277,9 @@
       cells.forEach(c => { c.innerHTML=''; c.classList.remove('win'); });
       updateStatus(`${catNames[0]} goes first!`);
     }
-
     catsound.volume = 1;
     function unlockSounds() {
-      try {
-        catsound.play(); catsound.pause();
-      } catch(e){}
+      try { catsound.play(); catsound.pause(); } catch(e){}
     }
     function startGame() {
       unlockSounds();
@@ -302,10 +290,8 @@
       resetGame();
     }
     startBtn.addEventListener('click', startGame);
-
     cells.forEach(cell => cell.addEventListener('click', handleCellClick));
     resetBtn.addEventListener('click', resetGame);
-
     overlay.addEventListener('keydown', (e) => {
       if(e.key === ' ' || e.key === 'Enter') {
         startGame();
