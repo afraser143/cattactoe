@@ -194,15 +194,18 @@
     <button id="reset-btn">😸 Play Again</button>
   </div>
   <div id="credits">
-    Cat photos: <a href="https://unsplash.com/photos/xII7efH1G6o" target="_blank">Eric Han</a> &amp; <a href="https://unsplash.com/photos/Du0Z2F3g9Vk" target="_blank">Paul Hanaoka</a> on Unsplash |
+    Cat photos: 
+    <a href="https://commons.wikimedia.org/wiki/File:Cat03.jpg" target="_blank">Wikimedia Cat03</a> &amp;
+    <a href="https://commons.wikimedia.org/wiki/File:A_Cat_Face.JPG" target="_blank">Wikimedia Cat Face</a> |
     Sound: <a href="https://freesound.org/people/PolterKaist/sounds/795848/" target="_blank">PolterKaist on FreeSound</a>
   </div>
   <!-- Sound Effect -->
   <audio id="catsound" src="https://cdn.freesound.org/previews/795/795848_2193265-lq.mp3"></audio>
   <script>
     const catNames = ["Mr. Whiskers", "Captain Purrfect"];
-    const CAT_X_URL = "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=400&q=80";
-    const CAT_O_URL = "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80";
+    // Wikimedia cat face images (guaranteed visible cats)
+    const CAT_X_URL = "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg";
+    const CAT_O_URL = "https://upload.wikimedia.org/wikipedia/commons/4/4e/A_Cat_Face.JPG";
     const CAT_X = `<img src="${CAT_X_URL}" alt="Mr. Whiskers" class="cat">`;
     const CAT_O = `<img src="${CAT_O_URL}" alt="Captain Purrfect" class="cat">`;
     const cats = [CAT_X, CAT_O];
