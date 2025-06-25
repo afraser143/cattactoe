@@ -196,16 +196,16 @@
   <div id="credits">
     Cat photos: 
     <a href="https://commons.wikimedia.org/wiki/File:Cat03.jpg" target="_blank">Wikimedia Cat03</a> &amp;
-    <a href="https://commons.wikimedia.org/wiki/File:A_Cat_Face.JPG" target="_blank">Wikimedia Cat Face</a> |
+    <a href="https://commons.wikimedia.org/wiki/File:Siam_lilacpoint.jpg" target="_blank">Siam lilacpoint</a> |
     Sound: <a href="https://freesound.org/people/PolterKaist/sounds/795848/" target="_blank">PolterKaist on FreeSound</a>
   </div>
   <!-- Sound Effect -->
   <audio id="catsound" src="https://cdn.freesound.org/previews/795/795848_2193265-lq.mp3"></audio>
   <script>
     const catNames = ["Mr. Whiskers", "Captain Purrfect"];
-    // Wikimedia cat face images (guaranteed visible cats)
+    // Wikimedia cat face images (guaranteed cats)
     const CAT_X_URL = "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg";
-    const CAT_O_URL = "https://upload.wikimedia.org/wikipedia/commons/4/4e/A_Cat_Face.JPG";
+    const CAT_O_URL = "https://upload.wikimedia.org/wikipedia/commons/2/25/Siam_lilacpoint.jpg";
     const CAT_X = `<img src="${CAT_X_URL}" alt="Mr. Whiskers" class="cat">`;
     const CAT_O = `<img src="${CAT_O_URL}" alt="Captain Purrfect" class="cat">`;
     const cats = [CAT_X, CAT_O];
@@ -280,7 +280,7 @@
       cells.forEach(c => { c.innerHTML=''; c.classList.remove('win'); });
       updateStatus(`${catNames[0]} goes first!`);
     }
-    catsound.volume = 10;
+    catsound.volume = 1;
     function unlockSounds() {
       try { catsound.play(); catsound.pause(); } catch(e){}
     }
