@@ -280,7 +280,7 @@
       cells.forEach(c => { c.innerHTML=''; c.classList.remove('win'); });
       updateStatus(`${catNames[0]} goes first!`);
     }
-    catsound.volume = 1;
+    catsound.volume = 10;
     function unlockSounds() {
       try { catsound.play(); catsound.pause(); } catch(e){}
     }
