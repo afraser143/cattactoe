@@ -36,6 +36,7 @@
       margin-top: 18px;
       margin-bottom: 32px;
       display: flex; flex-direction: column; align-items: center;
+      transition: filter 0.3s;
     }
     #status {
       min-height: 38px;
@@ -123,6 +124,41 @@
       font-style: italic;
       letter-spacing: 1px;
       text-align: center;
+      margin-bottom: 24px;
+    }
+    /* Overlay styles */
+    #start-overlay {
+      position:fixed;
+      z-index:1000;
+      top:0; left:0;
+      width:100vw; height:100vh;
+      background:rgba(255,255,255,0.97);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      transition: opacity 0.3s;
+    }
+    #start-btn {
+      padding:15px 48px;
+      font-size:1.3em;
+      border-radius:18px;
+      background:linear-gradient(90deg,#e4b2fc,#90e4fa);
+      color:#5b3072;
+      font-weight:700;
+      border:none;
+      cursor:pointer;
+      margin-bottom: 8px;
+      box-shadow:0 2px 12px #dab2fd37;
+      transition: background 0.14s;
+    }
+    #start-btn:hover {
+      background:linear-gradient(90deg,#90e4fa,#e4b2fc);
+    }
+    #start-overlay .note {
+      font-size: 0.97em;
+      color: #bbb;
+      margin-top: 16px;
     }
     @media (max-width: 530px) {
       #game-container {padding:8vw 2vw 5vw 2vw}
@@ -136,7 +172,14 @@
 </head>
 <body>
   <h1>Cat Tac Toe</h1>
-  <div id="game-container">
+  <div id="start-overlay">
+    <div style="font-family:Inter;font-size:2em;color:#a950d2;margin-bottom:18px;">
+      🐾 Click to start the Cat Game!
+    </div>
+    <button id="start-btn">Let’s Play!</button>
+    <div class="note">Sound works best after clicking this button.</div>
+  </div>
+  <div id="game-container" style="filter:blur(6px);pointer-events:none;">
     <div id="status"><span>🐾 Real Cat X goes first!</span></div>
     <div id="board">
       <button class="cell" data-index="0" aria-label="cell 1"></button>
@@ -160,7 +203,6 @@
   <audio id="win" src="https://cdn.pixabay.com/audio/2022/12/19/audio_12a3c97dc9.mp3"></audio>
   <audio id="draw" src="https://cdn.pixabay.com/audio/2022/08/20/audio_12fa19d014.mp3"></audio>
   <script>
-    // Two distinct cat images (X and O)
     const CAT_X_URL = "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=facearea&w=400&h=400&facepad=2";
     const CAT_O_URL = "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=facearea&w=400&h=400&facepad=2";
     const CAT_X = `<img src="${CAT_X_URL}" alt="Cat X" class="cat">`;
@@ -174,10 +216,13 @@
     const sfx_o = document.getElementById('meow-o');
     const sfx_win = document.getElementById('win');
     const sfx_draw = document.getElementById('draw');
+    const overlay = document.getElementById('start-overlay');
+    const startBtn = document.getElementById('start-btn');
+    const gameContainer = document.getElementById('game-container');
 
     let board = Array(9).fill('');
     let currentPlayer = 0; // 0 - CAT_X, 1 - CAT_O
-    let gameActive = true;
+    let gameActive = false; // Set true after start overlay click
 
     function markWin(line){
       line.forEach(i => cells[i].classList.add('win'));
@@ -245,11 +290,35 @@
       updateStatus("🐾 Real Cat X goes first!");
     }
 
+    // --- SOUND UNLOCK AND START ---
+    [sfx_x, sfx_o, sfx_win, sfx_draw].forEach(a => a.volume = 1);
+    function unlockSounds() {
+      try {
+        sfx_x.play(); sfx_x.pause();
+        sfx_o.play(); sfx_o.pause();
+        sfx_win.play(); sfx_win.pause();
+        sfx_draw.play(); sfx_draw.pause();
+      } catch(e){}
+    }
+    function startGame() {
+      unlockSounds();
+      overlay.style.display = 'none';
+      gameContainer.style.filter = 'none';
+      gameContainer.style.pointerEvents = 'auto';
+      gameActive = true;
+      resetGame();
+    }
+    startBtn.addEventListener('click', startGame);
+
     cells.forEach(cell => cell.addEventListener('click', handleCellClick));
     resetBtn.addEventListener('click', resetGame);
 
-    // In some browsers, sounds require user interaction before playing
-    document.body.addEventListener('mousedown', ()=>{}, {once:true});
+    // Optional: allow space/enter to trigger overlay button for accessibility
+    overlay.addEventListener('keydown', (e) => {
+      if(e.key === ' ' || e.key === 'Enter') {
+        startGame();
+      }
+    });
   </script>
 </body>
 </html>
