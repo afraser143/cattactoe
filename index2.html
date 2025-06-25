@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cat Tac Toe 😼</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+      background: #efdeee url('https://www.transparenttextures.com/patterns/cat-paw.png');
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    h1 {
+      margin: 30px 0 10px 0;
+      font-size: 2.6em;
+      letter-spacing: 3px;
+      color: #a85283;
+      text-shadow: 2px 2px 5px #ffd6eb;
+    }
+    #status {
+      font-size: 1.35em;
+      margin-bottom: 18px;
+      color: #54426b;
+      padding: 10px 30px;
+      border-radius: 25px;
+      background: #ffe0fa77;
+      box-shadow: 0 2px 10px #fbbfdc33;
+    }
+    #board {
+      display: grid;
+      grid-template-columns: repeat(3, 90px);
+      grid-gap: 14px;
+      background: #fff6fb;
+      padding: 24px;
+      border-radius: 20px;
+      box-shadow: 0 0 26px #f8bedc55;
+      margin-bottom: 30px;
+    }
+    .cell {
+      width: 90px;
+      height: 90px;
+      font-size: 2.7em;
+      color: #a85283;
+      background: #fff2fa;
+      border: 3px solid #fbbfdc;
+      border-radius: 16px;
+      box-shadow: 0 0 6px #fbbfdc66;
+      text-align: center;
+      line-height: 90px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+    .cell:hover {
+      background: #ffe5fd;
+      transform: scale(1.08) rotate(-3deg);
+    }
+    .win {
+      background: #dcfff7 !important;
+      color: #3db0a6 !important;
+      animation: winner-blink 0.8s infinite alternate;
+    }
+    @keyframes winner-blink {
+      0% { background: #dcfff7; }
+      100% { background: #fffde3; }
+    }
+    #reset-btn {
+      padding: 7px 32px;
+      font-size: 1.2em;
+      background: #ffe0fa;
+      color: #a85283;
+      border: 2px solid #fbbfdc;
+      border-radius: 18px;
+      cursor: pointer;
+      transition: background 0.2s;
+      box-shadow: 0 2px 14px #fbbfdc22;
+      margin-bottom: 22px;
+    }
+    #reset-btn:hover {
+      background: #fbbfdc;
+      color: #fff6fb;
+    }
+    #credits {
+      margin-top: 24px;
+      color: #aaaaaa;
+      font-size: 0.97em;
+      font-style: italic;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cat Tac Toe 😼</h1>
+  <div id="status">It's 😺's meow turn!</div>
+  <div id="board">
+    <div class="cell" data-index="0"></div>
+    <div class="cell" data-index="1"></div>
+    <div class="cell" data-index="2"></div>
+    <div class="cell" data-index="3"></div>
+    <div class="cell" data-index="4"></div>
+    <div class="cell" data-index="5"></div>
+    <div class="cell" data-index="6"></div>
+    <div class="cell" data-index="7"></div>
+    <div class="cell" data-index="8"></div>
+  </div>
+  <button id="reset-btn">Restart – new paws!</button>
+  <div id="credits">
+    Cat paw background from <a href="https://www.transparenttextures.com/" target="_blank">transparenttextures.com</a> | Cat sounds: <a href="https://pixabay.com/sound-effects/search/cat/" target="_blank">Pixabay</a>
+  </div>
+  <audio id="meow" src="https://cdn.pixabay.com/audio/2022/07/26/audio_12b4cf34bc.mp3"></audio>
+  <audio id="purr" src="https://cdn.pixabay.com/audio/2022/07/26/audio_12e59ca1dc.mp3"></audio>
+  <audio id="chirp" src="https://cdn.pixabay.com/audio/2022/07/26/audio_12e2d8c1f1.mp3"></audio>
+  <audio id="meow-win" src="https://cdn.pixabay.com/audio/2022/12/19/audio_12a3c97dc9.mp3"></audio>
+  <script>
+    const cats = ['😺', '😻'];
+    const statusDiv = document.getElementById('status');
+    const cells = document.querySelectorAll('.cell');
+    const resetBtn = document.getElementById('reset-btn');
+    const boardDiv = document.getElementById('board');
+    const sfx = {
+      meow : document.getElementById('meow'),
+      purr : document.getElementById('purr'),
+      chirp: document.getElementById('chirp'),
+      meowwin: document.getElementById('meow-win')
+    };
+
+    let board = Array(9).fill('');
+    let currentPlayer = 0; // 0 for 😺, 1 for 😻
+    let gameActive = true;
+
+    function checkWinner() {
+      const wins = [
+        [0,1,2], [3,4,5], [6,7,8],
+        [0,3,6], [1,4,7], [2,5,8],
+        [0,4,8], [2,4,6]
+      ];
+      for (let line of wins) {
+        const [a, b, c] = line;
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+          return {cat: board[a], line};
+        }
+      }
+      if (!board.includes('')) return {cat:'draw'};
+      return null;
+    }
+
+    function playSFX(name) {
+      if (sfx[name]) {
+        sfx[name].currentTime = 0; sfx[name].play();
+      }
+    }
+
+    function handleClick(e) {
+      const idx = +e.target.dataset.index;
+      if (!gameActive || board[idx]) return;
+
+      board[idx] = cats[currentPlayer];
+      e.target.textContent = cats[currentPlayer];
+      playSFX('chirp');
+
+      const result = checkWinner();
+      if (result) {
+        gameActive = false;
+        if (result.cat === 'draw') {
+          statusDiv.textContent = "It's a catnap—draw! 😸😻";
+          playSFX('purr');
+        } else {
+          result.line.forEach(i => cells[i].classList.add('win'));
+          statusDiv.textContent = `Pawsome win! ${result.cat} is the cat-ptain! 🎉`;
+          playSFX('meowwin');
+        }
+      } else {
+        currentPlayer = 1 - currentPlayer;
+        statusDiv.textContent = `It's ${cats[currentPlayer]}'s meow turn!`;
+        playSFX('meow');
+      }
+    }
+
+    function resetGame() {
+      board = Array(9).fill('');
+      currentPlayer = 0;
+      gameActive = true;
+      statusDiv.textContent = `It's ${cats[currentPlayer]}'s meow turn!`;
+      cells.forEach(cell => {
+        cell.textContent = '';
+        cell.classList.remove('win');
+      });
+      playSFX('purr');
+    }
+
+    boardDiv.addEventListener('click', handleClick);
+    resetBtn.addEventListener('click', resetGame);
+  </script>
+</body>
+</html>
