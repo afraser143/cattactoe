@@ -3,124 +3,141 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Cat Tic Tac Toe 😸</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500&display=swap" rel="stylesheet">
+  <title>Cat Tac Toe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet">
   <style>
     body {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      background: radial-gradient(circle at 80% 60%, #fcdff6 20%, #c6d8fb 100%);
-      font-family: 'Fredoka', 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at 80% 60%, #fcdff6 10%, #c6d8fb 100%);
+      font-family: 'Inter', Arial, sans-serif;
       margin: 0;
       padding: 0;
     }
     h1 {
-      margin-top: 32px; margin-bottom: 12px;
-      font-family: 'Fredoka', Arial, sans-serif;
-      font-weight: 600; font-size: 2.7em;
-      letter-spacing: 1.5px;
-      background: -webkit-linear-gradient(45deg, #c368f7, #2fd5c7 60%);
+      margin-top: 36px;
+      margin-bottom: 8px;
+      font-family: 'Inter', Arial, sans-serif;
+      font-weight: 800;
+      font-size: 2.7em;
+      letter-spacing: 2px;
+      background: -webkit-linear-gradient(90deg, #816aff, #ffa1c2 90%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      text-align: center;
     }
     #game-container {
-      background: rgba(255,255,255, 0.85);
-      box-shadow: 0 6px 40px #b8b0ff3e;
+      background: rgba(255,255,255, 0.89);
+      box-shadow: 0 8px 32px #baa6d62f;
       border-radius: 24px;
-      padding: 36px 30px 24px 30px;
+      padding: 32px 30px 24px 30px;
       margin-top: 18px;
-      margin-bottom: 30px;
+      margin-bottom: 32px;
       display: flex; flex-direction: column; align-items: center;
     }
     #status {
       min-height: 38px;
-      font-size: 1.27em;
+      font-size: 1.19em;
       margin: 0 0 18px 0;
-      color: #7b459a;
-      letter-spacing: 1.2px;
-      text-shadow: 0 2px 10px #c6b1e568;
+      color: #382f51;
+      letter-spacing: 1.1px;
+      text-shadow: 0 2px 10px #f6c7e668;
       text-align: center;
     }
     #board {
       display: grid;
-      grid-template-columns: repeat(3, 80px);
-      gap: 16px;
-      margin-bottom: 18px;
+      grid-template-columns: repeat(3, 90px);
+      gap: 14px;
+      margin-bottom: 17px;
       user-select: none;
+      background: rgba(255,255,255,0.2);
+      border-radius: 18px;
+      padding: 14px;
     }
     .cell {
-      width: 80px;
-      height: 80px;
-      font-size: 2.5em;
-      background: rgba(245, 238, 253, 0.80);
-      border-radius: 20px;
-      box-shadow: 0 2px 12px #dad3ec3a;
+      width: 90px;
+      height: 90px;
+      background: rgba(245, 238, 253, 0.92);
+      border-radius: 16px;
+      box-shadow: 0 2px 16px #dbe2f93e;
       border: none;
-      transition: background 0.18s, transform 0.16s;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       position: relative;
       outline: none;
+      padding: 0;
+      transition: background 0.15s, transform 0.13s;
+      overflow: hidden;
+    }
+    .cell img.cat {
+      width: 76px; height: 76px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #f8a4d6ba;
+      background: #fff;
+      pointer-events: none;
+      filter: drop-shadow(0 2px 8px #deb6e5bb);
+      transition: transform 0.11s;
     }
     .cell:hover, .cell:focus {
       background: #f4c6f93b;
       transform: scale(1.06);
-      z-index: 10;
+      z-index: 5;
     }
     .cell.win {
       background: #ffe3fb;
       box-shadow: 0 0 16px #d27fd9bb;
-      animation: blink-win 0.85s infinite alternate;
+      animation: blink-win 0.9s infinite alternate;
     }
     @keyframes blink-win {
       0%   { background: #fffde7; }
       100% { background: #ffe3fb; }
     }
     #reset-btn {
-      margin-top: 7px;
-      padding: 9px 36px;
+      margin-top: 10px;
+      padding: 10px 38px;
       border-radius: 30px;
-      font-size: 1.18em;
-      background: linear-gradient(90deg, #8ce6f9 40%, #d497fc 100%);
+      font-size: 1.14em;
+      background: linear-gradient(90deg, #8ce6f9 20%, #d497fc 100%);
       color: #743891;
       border: none;
       font-family: inherit;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 1px;
-      box-shadow: 0 4px 18px #c8b3f47c;
+      box-shadow: 0 4px 18px #dacdfc4a;
       cursor: pointer;
-      transition: background 0.15s;
+      transition: background 0.12s;
     }
     #reset-btn:hover {
       background: linear-gradient(90deg, #d4b8fc 10%, #7ee3f9 90%);
-      color: #463769;
+      color: #332257;
     }
     #credits {
-      margin-top: 16px;
+      margin-top: 14px;
       color: #b5a8bd;
-      font-size: 0.97em;
+      font-size: 0.92em;
       font-style: italic;
       letter-spacing: 1px;
       text-align: center;
-      margin-bottom: 18px;
     }
-    @media (max-width:530px) {
-      #game-container {padding:10vw 2vw 5vw 2vw}
-      #board {gap:4vw;}
-      .cell {width:16vw;height:16vw;font-size:8vw;}
-      #reset-btn{font-size:1em;}
+    @media (max-width: 530px) {
+      #game-container {padding:8vw 2vw 5vw 2vw}
+      #board {gap:3vw;}
+      .cell {width:18vw;height:18vw;}
+      .cell img.cat {width:15vw;height:15vw;}
+      #reset-btn {padding:8px 4vw;}
+      h1 {font-size: 8vw;}
     }
   </style>
 </head>
 <body>
-  <h1>Cat Tic Tac Toe</h1>
+  <h1>Cat Tac Toe</h1>
   <div id="game-container">
-    <div id="status">😺 Cat X goes first!</div>
+    <div id="status"><span>🐾 Real Cat X goes first!</span></div>
     <div id="board">
       <button class="cell" data-index="0" aria-label="cell 1"></button>
       <button class="cell" data-index="1" aria-label="cell 2"></button>
@@ -132,22 +149,24 @@
       <button class="cell" data-index="7" aria-label="cell 8"></button>
       <button class="cell" data-index="8" aria-label="cell 9"></button>
     </div>
-    <button id="reset-btn">😼 Play Again</button>
+    <button id="reset-btn">😸 Play Again</button>
   </div>
   <div id="credits">
-    Cat game with free cat sounds from <a href="https://pixabay.com/sound-effects/search/cat/" target="_blank">Pixabay</a>. Puns and paws by Goose!
+    Cat photos: <a href="https://unsplash.com/" target="_blank">Unsplash</a> | Sounds: <a href="https://pixabay.com/sound-effects/search/cat/" target="_blank">Pixabay</a>
   </div>
-  <!-- Sound Effects (all from Pixabay free use) -->
+  <!-- Sound Effects -->
   <audio id="meow-x" src="https://cdn.pixabay.com/audio/2022/07/26/audio_12b4cf34bc.mp3"></audio>
   <audio id="meow-o" src="https://cdn.pixabay.com/audio/2022/07/26/audio_12e59ca1dc.mp3"></audio>
   <audio id="win" src="https://cdn.pixabay.com/audio/2022/12/19/audio_12a3c97dc9.mp3"></audio>
   <audio id="draw" src="https://cdn.pixabay.com/audio/2022/08/20/audio_12fa19d014.mp3"></audio>
   <script>
-    // Cute cat emoji for X and O
-    const CAT_X = '😺';
-    const CAT_O = '😻';
+    // Two distinct cat images (X and O)
+    const CAT_X_URL = "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=facearea&w=400&h=400&facepad=2";
+    const CAT_O_URL = "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=facearea&w=400&h=400&facepad=2";
+    const CAT_X = `<img src="${CAT_X_URL}" alt="Cat X" class="cat">`;
+    const CAT_O = `<img src="${CAT_O_URL}" alt="Cat O" class="cat">`;
     const cats = [CAT_X, CAT_O];
-
+    const catsTextName = ["Cat X", "Cat O"];
     const statusDiv = document.getElementById('status');
     const cells = document.querySelectorAll('.cell');
     const resetBtn = document.getElementById('reset-btn');
@@ -155,20 +174,19 @@
     const sfx_o = document.getElementById('meow-o');
     const sfx_win = document.getElementById('win');
     const sfx_draw = document.getElementById('draw');
+
     let board = Array(9).fill('');
     let currentPlayer = 0; // 0 - CAT_X, 1 - CAT_O
     let gameActive = true;
 
-    // For accessibility: mark winning cells
     function markWin(line){
       line.forEach(i => cells[i].classList.add('win'));
     }
 
     function playSound(type){
-      // Always reset audio time
       switch(type){
-        case CAT_X: sfx_x.currentTime = 0; sfx_x.play(); break;
-        case CAT_O: sfx_o.currentTime = 0; sfx_o.play(); break;
+        case 0: sfx_x.currentTime = 0; sfx_x.play(); break;
+        case 1: sfx_o.currentTime = 0; sfx_o.play(); break;
         case 'win': sfx_win.currentTime = 0; sfx_win.play(); break;
         case 'draw': sfx_draw.currentTime = 0; sfx_draw.play(); break;
       }
@@ -191,30 +209,31 @@
     }
 
     function updateStatus(msg){
-      statusDiv.textContent = msg;
+      statusDiv.innerHTML = `<span>${msg}</span>`;
     }
 
     function handleCellClick(e){
       const idx = +e.target.dataset.index;
       if(!gameActive || board[idx]) return;
       board[idx] = cats[currentPlayer];
-      e.target.textContent = cats[currentPlayer];
-      playSound(cats[currentPlayer]);
+      e.target.innerHTML = cats[currentPlayer];
+      playSound(currentPlayer);
 
       const result = checkWinner();
       if(result){
         gameActive = false;
         if(result.winner === 'draw'){
-          updateStatus("😸 It's a purrfect draw! Try again!");
+          updateStatus("😸 It's a paw-some draw! Try again!");
           playSound('draw');
         } else {
+          const winCatName = catsTextName[currentPlayer];
           markWin(result.line);
-          updateStatus(`🎉 Pawsome! ${result.winner} wins!`);
+          updateStatus(`🎉 Cat-grats! <span style="color:#8f41bb;font-weight:700">${winCatName}</span> wins!`);
           playSound('win');
         }
       } else {
         currentPlayer = 1 - currentPlayer;
-        updateStatus(`It's ${cats[currentPlayer]}'s turn to paw!`);
+        updateStatus(`It's <span style="color:#9b5cc6;font-weight:600">${catsTextName[currentPlayer]}</span>'s turn!`);
       }
     }
 
@@ -222,15 +241,14 @@
       board = Array(9).fill('');
       currentPlayer = 0;
       gameActive = true;
-      cells.forEach(c => { c.textContent=''; c.classList.remove('win'); });
-      updateStatus("😺 Cat X goes first!");
+      cells.forEach(c => { c.innerHTML=''; c.classList.remove('win'); });
+      updateStatus("🐾 Real Cat X goes first!");
     }
 
-    // Event listeners
     cells.forEach(cell => cell.addEventListener('click', handleCellClick));
     resetBtn.addEventListener('click', resetGame);
 
-    // Make sound work after first human interaction (some browsers will not play audio until user interacts)
+    // In some browsers, sounds require user interaction before playing
     document.body.addEventListener('mousedown', ()=>{}, {once:true});
   </script>
 </body>
