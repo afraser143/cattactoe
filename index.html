@@ -174,13 +174,13 @@
   <h1>Cat Tac Toe</h1>
   <div id="start-overlay">
     <div style="font-family:Inter;font-size:2em;color:#a950d2;margin-bottom:18px;">
-      🐾 Click to start the Cat Game!
+      Click to start the Cat Game!
     </div>
     <button id="start-btn">Let’s Play!</button>
     <div class="note">Sound works best after clicking this button.</div>
   </div>
   <div id="game-container" style="filter:blur(6px);pointer-events:none;">
-    <div id="status"><span>🐾 Real Cat X goes first!</span></div>
+    <div id="status"><span>Mr. Whiskers goes first!</span></div>
     <div id="board">
       <button class="cell" data-index="0" aria-label="cell 1"></button>
       <button class="cell" data-index="1" aria-label="cell 2"></button>
@@ -195,17 +195,19 @@
     <button id="reset-btn">😸 Play Again</button>
   </div>
   <div id="credits">
-    Cat photos: <a href="https://unsplash.com/" target="_blank">Unsplash</a> | Sound: <a href="https://freesound.org/people/PolterKaist/sounds/795848/" target="_blank">PolterKaist on FreeSound</a>
+    Cat photos: <a href="https://unsplash.com/photos/xII7efH1G6o" target="_blank">Eric Han</a> &amp; <a href="https://unsplash.com/photos/IXUM4cJynP0" target="_blank">Tran Mau Tri Tam</a> on Unsplash |
+    Sound: <a href="https://freesound.org/people/PolterKaist/sounds/795848/" target="_blank">PolterKaist on FreeSound</a>
   </div>
   <!-- Sound Effect -->
   <audio id="catsound" src="https://cdn.freesound.org/previews/795/795848_2193265-lq.mp3"></audio>
   <script>
+    // Funny cat names with only cat images!
+    const catNames = ["Mr. Whiskers", "Captain Purrfect"];
     const CAT_X_URL = "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=facearea&w=400&h=400&facepad=2";
-    const CAT_O_URL = "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=facearea&w=400&h=400&facepad=2";
-    const CAT_X = `<img src="${CAT_X_URL}" alt="Cat X" class="cat">`;
-    const CAT_O = `<img src="${CAT_O_URL}" alt="Cat O" class="cat">`;
+    const CAT_O_URL = "https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?auto=format&fit=facearea&w=400&h=400&facepad=2";
+    const CAT_X = `<img src="${CAT_X_URL}" alt="Mr. Whiskers" class="cat">`;
+    const CAT_O = `<img src="${CAT_O_URL}" alt="Captain Purrfect" class="cat">`;
     const cats = [CAT_X, CAT_O];
-    const catsTextName = ["Cat X", "Cat O"];
     const statusDiv = document.getElementById('status');
     const cells = document.querySelectorAll('.cell');
     const resetBtn = document.getElementById('reset-btn');
@@ -215,7 +217,7 @@
     const gameContainer = document.getElementById('game-container');
 
     let board = Array(9).fill('');
-    let currentPlayer = 0; // 0 - CAT_X, 1 - CAT_O
+    let currentPlayer = 0; // 0 - Mr. Whiskers, 1 - Captain Purrfect
     let gameActive = false; // Set true after start overlay click
 
     function markWin(line){
@@ -263,17 +265,17 @@
       if(result){
         gameActive = false;
         if(result.winner === 'draw'){
-          updateStatus("😸 It's a paw-some draw! Try again!");
+          updateStatus("It's a purr-fect draw! Try again!");
           playSound();
         } else {
-          const winCatName = catsTextName[currentPlayer];
+          const winCatName = catNames[currentPlayer];
           markWin(result.line);
-          updateStatus(`🎉 Cat-grats! <span style="color:#8f41bb;font-weight:700">${winCatName}</span> wins!`);
+          updateStatus(`🎉 ${winCatName} wins!`);
           playSound();
         }
       } else {
         currentPlayer = 1 - currentPlayer;
-        updateStatus(`It's <span style="color:#9b5cc6;font-weight:600">${catsTextName[currentPlayer]}</span>'s turn!`);
+        updateStatus(`It's <span style="color:#9b5cc6;font-weight:600">${catNames[currentPlayer]}</span>'s turn!`);
       }
     }
 
@@ -282,10 +284,9 @@
       currentPlayer = 0;
       gameActive = true;
       cells.forEach(c => { c.innerHTML=''; c.classList.remove('win'); });
-      updateStatus("🐾 Real Cat X goes first!");
+      updateStatus(`${catNames[0]} goes first!`);
     }
 
-    // --- SOUND UNLOCK AND START ---
     catsound.volume = 1;
     function unlockSounds() {
       try {
