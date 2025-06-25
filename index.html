@@ -195,13 +195,10 @@
     <button id="reset-btn">😸 Play Again</button>
   </div>
   <div id="credits">
-    Cat photos: <a href="https://unsplash.com/" target="_blank">Unsplash</a> | Sounds: <a href="https://pixabay.com/sound-effects/search/cat/" target="_blank">Pixabay</a>
+    Cat photos: <a href="https://unsplash.com/" target="_blank">Unsplash</a> | Sound: <a href="https://freesound.org/people/PolterKaist/sounds/795848/" target="_blank">PolterKaist on FreeSound</a>
   </div>
-  <!-- Sound Effects -->
-  <audio id="meow-x" src="https://cdn.pixabay.com/audio/2022/07/26/audio_12b4cf34bc.mp3"></audio>
-  <audio id="meow-o" src="https://cdn.pixabay.com/audio/2022/07/26/audio_12e59ca1dc.mp3"></audio>
-  <audio id="win" src="https://cdn.pixabay.com/audio/2022/12/19/audio_12a3c97dc9.mp3"></audio>
-  <audio id="draw" src="https://cdn.pixabay.com/audio/2022/08/20/audio_12fa19d014.mp3"></audio>
+  <!-- Sound Effect -->
+  <audio id="catsound" src="https://cdn.freesound.org/previews/795/795848_2193265-lq.mp3"></audio>
   <script>
     const CAT_X_URL = "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=facearea&w=400&h=400&facepad=2";
     const CAT_O_URL = "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=facearea&w=400&h=400&facepad=2";
@@ -212,10 +209,7 @@
     const statusDiv = document.getElementById('status');
     const cells = document.querySelectorAll('.cell');
     const resetBtn = document.getElementById('reset-btn');
-    const sfx_x = document.getElementById('meow-x');
-    const sfx_o = document.getElementById('meow-o');
-    const sfx_win = document.getElementById('win');
-    const sfx_draw = document.getElementById('draw');
+    const catsound = document.getElementById('catsound');
     const overlay = document.getElementById('start-overlay');
     const startBtn = document.getElementById('start-btn');
     const gameContainer = document.getElementById('game-container');
@@ -228,13 +222,14 @@
       line.forEach(i => cells[i].classList.add('win'));
     }
 
-    function playSound(type){
-      switch(type){
-        case 0: sfx_x.currentTime = 0; sfx_x.play(); break;
-        case 1: sfx_o.currentTime = 0; sfx_o.play(); break;
-        case 'win': sfx_win.currentTime = 0; sfx_win.play(); break;
-        case 'draw': sfx_draw.currentTime = 0; sfx_draw.play(); break;
-      }
+    function playSound(){
+      try {
+        catsound.currentTime = 0;
+        let playPromise = catsound.play();
+        if(playPromise !== undefined){
+          playPromise.catch(e=>{});
+        }
+      } catch(e){}
     }
 
     function checkWinner(){
@@ -262,19 +257,19 @@
       if(!gameActive || board[idx]) return;
       board[idx] = cats[currentPlayer];
       e.target.innerHTML = cats[currentPlayer];
-      playSound(currentPlayer);
+      playSound();
 
       const result = checkWinner();
       if(result){
         gameActive = false;
         if(result.winner === 'draw'){
           updateStatus("😸 It's a paw-some draw! Try again!");
-          playSound('draw');
+          playSound();
         } else {
           const winCatName = catsTextName[currentPlayer];
           markWin(result.line);
           updateStatus(`🎉 Cat-grats! <span style="color:#8f41bb;font-weight:700">${winCatName}</span> wins!`);
-          playSound('win');
+          playSound();
         }
       } else {
         currentPlayer = 1 - currentPlayer;
@@ -291,13 +286,10 @@
     }
 
     // --- SOUND UNLOCK AND START ---
-    [sfx_x, sfx_o, sfx_win, sfx_draw].forEach(a => a.volume = 1);
+    catsound.volume = 1;
     function unlockSounds() {
       try {
-        sfx_x.play(); sfx_x.pause();
-        sfx_o.play(); sfx_o.pause();
-        sfx_win.play(); sfx_win.pause();
-        sfx_draw.play(); sfx_draw.pause();
+        catsound.play(); catsound.pause();
       } catch(e){}
     }
     function startGame() {
@@ -313,7 +305,6 @@
     cells.forEach(cell => cell.addEventListener('click', handleCellClick));
     resetBtn.addEventListener('click', resetGame);
 
-    // Optional: allow space/enter to trigger overlay button for accessibility
     overlay.addEventListener('keydown', (e) => {
       if(e.key === ' ' || e.key === 'Enter') {
         startGame();
